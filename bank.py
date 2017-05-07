@@ -6,8 +6,6 @@ import events
 from constants import errorquotes, responses
 
 
-# TODO
-# Maybe states should be removed.
 class State(enum.Enum):
     STANDBY = enum.auto()
     ADDING = enum.auto()

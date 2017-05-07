@@ -7,8 +7,6 @@ from constants import bot_token, responses, errorquotes, config
 
 # TODO
 # - New chat title.
-# - Handle possible changes in chat_id:
-#   replace bank_id with it's own, independent ones.
 
 bot = Bot(bot_token.TOKEN, threaded=False)
 
@@ -254,8 +252,6 @@ def text_handler(message):
         active_window = bot.get_window(message.from_user)
         active_window.handle_text(message)
         if active_window.finished():
-            # FIXME
-            # Ugly.
             response = active_window.get_response()
             bot.switch_to_default_window(message.from_user)
             new_message = bot.send_message(message.chat.id,
@@ -282,8 +278,6 @@ def text_handler(message):
         raise
 
 
-# TODO
-# Overflow protection!
 @bot.callback_query_handler(
     func=lambda query: query.data.startswith('KEYBOARD'))
 def handle_keyboard_input(query):

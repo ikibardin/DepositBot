@@ -118,8 +118,6 @@ class DefaultWindow(DepositBotWindow):
         return None, markup
 
 
-# TODO
-# Implement storing description mode in the database.
 class KeyboardWindow(DepositBotWindow):
     def __init__(self, bot, user, chat, message_id, mode=None, number=None):
         """ Can raise exception.BankNotFoundError as
@@ -223,8 +221,8 @@ class KeyboardWindow(DepositBotWindow):
 
     def _assert_button_is_correct(self, button):
         if (not self._description_mode
-                and button not in ['CANCEL', 'OK', 'BACKSPACE']
-                and not (button.isdigit() and len(button) == 1)):
+            and button not in ['CANCEL', 'OK', 'BACKSPACE']
+            and not (button.isdigit() and len(button) == 1)):
             raise exceptions.InvalidButtonError(
                 errorquotes.INVALID_KEYBOARD_BUTTON.format(button)
             )
@@ -493,7 +491,7 @@ class ConnectWindow(DepositBotWindow):
         assert self._current_chat is not None
         assert self._available_chats is not None
         return self.get_text(), \
-            self._convert_into_markup(self._available_chats)
+               self._convert_into_markup(self._available_chats)
 
     def connect(self, chat_id):
         if chat_id == self._current_chat.id:
