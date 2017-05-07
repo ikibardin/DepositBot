@@ -1,0 +1,1 @@
+INSERT INTO bank_user_relation (bank_id, user_id) VALUES (?, ?);

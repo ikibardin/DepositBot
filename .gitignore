@@ -1,0 +1,5 @@
+*.pyc
+.idea
+database/deposit-bot.sqlite
+constants/bot_token.py
+logs.txt
