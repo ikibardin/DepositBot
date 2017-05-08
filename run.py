@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import exceptions
 from bot import Bot
-
+import exceptions
 import windows
 from constants import bot_token, responses, errorquotes, config
 

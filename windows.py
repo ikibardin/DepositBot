@@ -2,8 +2,8 @@ import random
 
 from telebot import types, apihelper
 
-import exceptions
 import events
+import exceptions
 from constants import errorquotes, responses, config, text_templates
 
 

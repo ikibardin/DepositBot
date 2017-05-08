@@ -1,16 +1,13 @@
 import sqlite3
 
 from telebot import types
+
 import events
-import database.db_paths as paths
-from database.converter import Converter
 import windows
 from bank import Bank
+from database.converter import Converter
+import database.db_paths as paths
 
-
-# TODO
-# Adaptation - to special class.
-# SQL queries - to files.
 
 class SQLDatabase:
     def __init__(self, bot, db_name):
@@ -159,8 +156,6 @@ class SQLDatabase:
         print(chat_rows)
         return [self.converter.row_to_chat(row) for row in chat_rows]
 
-    # FIXME
-    # Inefficient.
     def update_window(self, window):
         with open(paths.UPDATE_WINDOW, 'r') as update_window_script:
             query = update_window_script.read()
