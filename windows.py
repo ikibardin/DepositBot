@@ -229,8 +229,8 @@ class KeyboardWindow(DepositBotWindow):
 
     def _assert_button_is_correct(self, button):
         if (not self._description_mode
-            and button not in ['CANCEL', 'OK', 'BACKSPACE']
-            and not (button.isdigit() and len(button) == 1)):
+                and button not in ['CANCEL', 'OK', 'BACKSPACE']
+                and not (button.isdigit() and len(button) == 1)):
             raise exceptions.InvalidButtonError(
                 errorquotes.INVALID_KEYBOARD_BUTTON.format(button)
             )
