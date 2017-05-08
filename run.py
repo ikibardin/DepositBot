@@ -290,7 +290,6 @@ def handle_keyboard_input(query):
         pressed_button = query.data.split(';')[1]
         active_window.press_button(pressed_button)
         if not active_window.finished():
-            active_window.update_window()
             return
         response = active_window.get_response()
         bot.switch_to_default_window(query.from_user)

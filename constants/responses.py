@@ -62,6 +62,9 @@ SUCCESS_ADD = 'Successfully added *{}*.'
 SUCCESS_TAKE = 'Successfully taken *{}*.'
 SUCCESS_SET = 'Successfully set amount in the bank to *{}*.'
 
+KEYBOARD_INPUT_ERROR = 'Unable to process the operation. Note that input ' \
+                       'value must be a *positive integer*.'
+
 DESCRIPTION_QUESTION = 'Would you like to leave a description for the ' \
                        'following operation?\n{}'
 DESCRIPTION_WAITING = 'Please send me description for the following ' \

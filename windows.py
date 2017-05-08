@@ -194,15 +194,21 @@ class KeyboardWindow(DepositBotWindow):
                 self.user)
             self._finished = True
         elif button == 'OK':
+            if not self.get_number() > 0:
+                self.update_window(responses.KEYBOARD_INPUT_ERROR)
+                return
             self._description_mode = True
             self._text = self._get_description_text()
         elif button == 'BACKSPACE':
             self._number //= 10
         else:
             self._number = 10 * self._number + int(button)
+        self.update_window()
 
     def _finish_input(self, description):
         assert self.mode in config.KEYBOARD_MODES
+        self._waiting_for_text = False
+        self._description_mode = False
         if self.mode == 'ADD' or self.mode == 'TAKE':
             response = self.bot.get_active_bank(
                 self.user).handle_keyboard_input(
@@ -215,8 +221,10 @@ class KeyboardWindow(DepositBotWindow):
             self.bot.get_active_bank(self.user).set_money(self.user,
                                                           self.get_number(),
                                                           description)
-            self._response = responses.SUCCESS_SET.format(self.get_number())
+            self._response = responses.SUCCESS_SET.format(
+                self.get_number())
         self._waiting_for_text = False
+        self._description_mode = False
         self._finished = True
 
     def _assert_button_is_correct(self, button):
