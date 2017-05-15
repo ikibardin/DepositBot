@@ -80,7 +80,6 @@ class SQLDatabase:
         query = 'SELECT b.chat_id AS chat_id FROM bank b'
         with self.connection:
             rows = self.connection.execute(query).fetchall()
-        print(rows)
         return [row['chat_id'] for row in rows]
 
     def get_windows_list(self):
@@ -150,10 +149,8 @@ class SQLDatabase:
     def get_available_chats(self, user):
         with open(paths.SELECT_AVAILABLE_CHATS, 'r') as select_chats_script:
             query = select_chats_script.read()
-        print(user.id, type(user.id))
         with self.connection:
             chat_rows = self.connection.execute(query, [user.id]).fetchall()
-        print(chat_rows)
         return [self.converter.row_to_chat(row) for row in chat_rows]
 
     def update_window(self, window):

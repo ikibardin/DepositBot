@@ -139,7 +139,6 @@ class KeyboardWindow(DepositBotWindow):
         return self.get_text(), self.get_markup()
 
     def get_text(self):
-        print(self._waiting_for_text)
         if self._waiting_for_text:
             return self._get_waiting_text()
         elif self._description_mode:
@@ -184,7 +183,6 @@ class KeyboardWindow(DepositBotWindow):
 
     def press_button(self, button):
         self._assert_button_is_correct(button)
-        print(button)
         if button == 'DESCR_YES':
             self._waiting_for_text = True
         elif button == 'DESCR_NO':
@@ -306,7 +304,6 @@ class KeyboardWindow(DepositBotWindow):
         return markup
 
     def _get_waiting_text(self):
-        print(responses.DESCRIPTION_WAITING.format(self._get_operation_text()))
         return responses.DESCRIPTION_WAITING.format(self._get_operation_text())
 
     def _get_operation_text(self):
