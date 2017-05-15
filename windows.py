@@ -51,6 +51,7 @@ class DepositBotWindow:
         self.bot.update_window_record(self)
 
     def update_window(self, response=None):
+        self.bot.logger.info('Updating window...')
         assert self.message_id is not None
         window_text, window_markup = self.get_message()
         bank_info = self.bot.bank_info(self.user)
@@ -72,6 +73,7 @@ class DepositBotWindow:
                 reply_markup=window_markup,
                 parse_mode='Markdown'
             )
+            self.bot.logger.info('Window updated.')
         except apihelper.ApiException as exception:
             self.bot.logger.warning(exception)
 

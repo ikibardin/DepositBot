@@ -107,7 +107,7 @@ class Bot(telebot.TeleBot):
             return self.banks[chat.id]
         except KeyError as exception:
             raise exceptions.BankNotFoundError(
-                errorquotes.BANK_NOT_FOUND_CHAT.format(repr(chat))
+                errorquotes.BANK_NOT_FOUND_CHAT.format(chat)
             ) from exception
 
     def get_window(self, user):
@@ -118,7 +118,7 @@ class Bot(telebot.TeleBot):
             return self.windows[user.id]
         except KeyError as exception:
             raise exceptions.WindowNotFoundError(
-                errorquotes.WINDOW_NOT_FOUND.format(repr(user))
+                errorquotes.WINDOW_NOT_FOUND.format((user))
             ) from exception
 
     def bank_info(self, user):
@@ -149,7 +149,7 @@ class Bot(telebot.TeleBot):
             )
         except KeyError as exception:
             raise exceptions.WindowNotFoundError(
-                errorquotes.WINDOW_NOT_FOUND.format(repr(user))
+                errorquotes.WINDOW_NOT_FOUND.format(user)
             ) from exception
 
     def switch_to_keyboard_window(self, user):
@@ -159,7 +159,7 @@ class Bot(telebot.TeleBot):
             )
         except KeyError as exception:
             raise exceptions.WindowNotFoundError(
-                errorquotes.WINDOW_NOT_FOUND.format(repr(user))
+                errorquotes.WINDOW_NOT_FOUND.format(user)
             ) from exception
 
     def switch_to_history_window(self, user):
@@ -169,7 +169,7 @@ class Bot(telebot.TeleBot):
             )
         except KeyError as exception:
             raise exceptions.WindowNotFoundError(
-                errorquotes.WINDOW_NOT_FOUND.format(repr(user))
+                errorquotes.WINDOW_NOT_FOUND.format(user)
             ) from exception
 
     def switch_to_connect_window(self, user):
@@ -177,7 +177,7 @@ class Bot(telebot.TeleBot):
             current_chat = self.chats[self.user_connections[user.id]]
         except KeyError as exception:
             raise exceptions.BankNotFoundError(
-                errorquotes.BANK_NOT_FOUND_USER.format(str(user))
+                errorquotes.BANK_NOT_FOUND_USER.format(user)
             ) from exception
         available_chats = self._db.get_available_chats(user)
         try:
@@ -186,7 +186,7 @@ class Bot(telebot.TeleBot):
             )
         except KeyError as exception:
             raise exceptions.WindowNotFoundError(
-                errorquotes.WINDOW_NOT_FOUND.format(repr(user))
+                errorquotes.WINDOW_NOT_FOUND.format(user)
             ) from exception
         self.windows[user.id].set_chats(current_chat,
                                         available_chats)
