@@ -2,7 +2,7 @@
 from bot import Bot
 import exceptions
 import windows
-from constants import bot_token, responses, errorquotes, config, text_templates
+from constants import bot_token, responses, errorquotes, config
 
 # TODO
 # - New chat title.
