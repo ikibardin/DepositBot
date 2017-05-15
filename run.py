@@ -2,7 +2,7 @@
 from bot import Bot
 import exceptions
 import windows
-from constants import bot_token, responses, errorquotes, config
+from constants import bot_token, responses, errorquotes, config, text_templates
 
 # TODO
 # - New chat title.
@@ -13,7 +13,6 @@ bot = Bot(bot_token.TOKEN, threaded=False)
 @bot.message_handler(commands=['start'])
 def send_welcome_message(message):
     bot.scan_message(message)
-    print(message.chat.id not in bot.banks.keys())
     if message.chat.id not in bot.banks.keys():
         bot.create_new_bank(message.chat, message.from_user)
         bot.connect_user(message.from_user, message.chat)
@@ -74,7 +73,7 @@ def command_help(message):
 @bot.callback_query_handler(func=lambda query: query.data == 'HELP')
 def query_help(query):
     try:
-        bot.answer_callback_query(query.id)
+        bot.log_query(query)
         bot.get_window(query.from_user).update_window(responses.HELP_TEXT)
     except exceptions.WindowNotFoundError as exception:
         bot.logger.error(exception)
@@ -92,7 +91,7 @@ def query_help(query):
     func=lambda query: query.data in config.KEYBOARD_MODES)
 def query_take(query):
     try:
-        bot.answer_callback_query(query.id)
+        bot.log_query(query)
         bot.switch_to_keyboard_window(query.from_user)
         bot.get_window(query.from_user).set_mode(query.data)
         bot.get_window(query.from_user).update_window()
@@ -118,7 +117,7 @@ def query_take(query):
 @bot.callback_query_handler(func=lambda query: query.data == 'LOGS')
 def query_logs(query):
     try:
-        bot.answer_callback_query(query.id)
+        bot.log_query(query)
         bot.switch_to_history_window(query.from_user)
         bot.get_window(query.from_user).update_window()
     except exceptions.WindowNotFoundError as exception:
@@ -171,6 +170,7 @@ def add_users(message):
 @bot.callback_query_handler(func=lambda query: query.data == 'JOIN_BANK')
 def query_handler(query):
     try:
+        bot.log_query(query)
         bot.scan_user(query.from_user)
         active_bank = bot.get_chat_bank(query.message.chat)
         if active_bank.user_has_access(query.from_user):
@@ -193,7 +193,7 @@ def query_handler(query):
 @bot.callback_query_handler(func=lambda query: query.data == 'CHANGE BANK')
 def query_connect(query):
     try:
-        bot.answer_callback_query(query.id)
+        bot.log_query(query)
         bot.switch_to_connect_window(query.from_user)
         bot.get_window(query.from_user).update_window()
     except exceptions.WindowNotFoundError as exception:
@@ -215,6 +215,7 @@ def query_connect(query):
     func=lambda query: query.data.startswith('CONNECT_TO'))
 def connect_to_bank(query):
     try:
+        bot.log_query(query)
         new_chat_id = int(query.data.split(';')[1])
         active_window = bot.get_window(query.from_user)
         if not isinstance(active_window, windows.ConnectWindow):
@@ -281,7 +282,7 @@ def text_handler(message):
     func=lambda query: query.data.startswith('KEYBOARD'))
 def handle_keyboard_input(query):
     try:
-        bot.answer_callback_query(query.id)
+        bot.log_query(query)
         active_window = bot.get_window(query.from_user)
         if not isinstance(active_window, windows.KeyboardWindow):
             raise exceptions.InvalidButtonError(
@@ -314,6 +315,7 @@ def handle_keyboard_input(query):
 @bot.callback_query_handler(func=lambda query: query.data == 'PASS')
 def pass_query(query):
     try:
+        bot.log_query(query)
         bot.answer_callback_query(query.id)
     except exceptions.ApiException as exception:
         bot.logger.warning(exception)
@@ -327,6 +329,7 @@ def pass_query(query):
 @bot.callback_query_handler(func=lambda query: query.data == 'UPDATE')
 def update_query(query):
     try:
+        bot.log_query(query)
         bot.answer_callback_query(query.id)
         bot.get_window(query.from_user).update_window()
     except exceptions.WindowNotFoundError as exception:
@@ -348,14 +351,15 @@ def update_query(query):
     func=lambda query: query.data.startswith('HISTORY'))
 def switch_event(query):
     try:
+        bot.log_query(query)
         active_window = bot.get_window(query.from_user)
         if not isinstance(active_window, windows.HistoryWindow):
             raise exceptions.InvalidButtonError(
                 errorquotes.NOT_HISTORY_INSTANCE.format(type(active_window))
             )
         active_window.handle_callback_query(query)
-        bot.answer_callback_query(query.id)
         if not active_window.finished():
+            bot.answer_callback_query(query.id)
             return
         bot.switch_to_default_window(query.from_user)
         bot.get_window(query.from_user).update_window()
@@ -378,4 +382,3 @@ def switch_event(query):
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
-    print('Shutting down.')

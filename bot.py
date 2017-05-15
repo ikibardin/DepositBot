@@ -16,7 +16,9 @@ logging.basicConfig(filename=config.LOGS_PATH,
 class Bot(telebot.TeleBot):
     def __init__(self, token, threaded=True):
         super().__init__(token, threaded=threaded)
-        self.logger = logging
+        self.logger = telebot.logger
+        self.logger.setLevel(logging.INFO)
+
         self.logger.info('Starting up...')
 
         self._db = SQLDatabase(self, config.DATABASE_PATH)
@@ -34,7 +36,6 @@ class Bot(telebot.TeleBot):
         self.user_connections = dict(self._db.get_user_connections())
         self._init_windows()
         self.logger.info('Running...')
-        print('Running...')
 
     def _init_users(self):
         assert not bool(self.users)
@@ -73,6 +74,8 @@ class Bot(telebot.TeleBot):
             self.logger.info('New user: {}'.format(user))
 
     def scan_message(self, message):
+        self.logger.info(text_templates.MESSAGE_LOG.format(message.text,
+                                                           message.from_user))
         self.scan_user(message.from_user)
         if message.chat.id not in self.chats.keys():
             self._db.insert_new_chat(message.chat)
@@ -193,3 +196,7 @@ class Bot(telebot.TeleBot):
 
     def get_event_description(self, event_id):
         return self._db.get_event(event_id).description
+
+    def log_query(self, query):
+        self.logger.info(text_templates.QUERY_LOG.format(query.data,
+                                                         query.from_user))

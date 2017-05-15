@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+QUERY_LOG = 'Query {} from user {}.'
+
+MESSAGE_LOG = 'Message {} from user {}.'
+
 BANK_INFO = 'Current bank: *{:>25}*\n\n' \
             'Administrator: *{:>23}*\n\n' \
             'Currently in the bank: *{:>16,}*'
